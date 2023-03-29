@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"sync"
+	"time"
 )
 
 type SimpleWeb struct {
@@ -23,7 +24,9 @@ type SimpleWeb struct {
 }
 
 func (sw *SimpleWeb) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	begin := time.Now()
 	sw.httpMux.ServeHTTP(w, r)
+	log.Printf("host: %v uri: %v used time: %0.3f\n", r.Host, r.RequestURI, time.Since(begin).Seconds())
 }
 
 func (sw *SimpleWeb) Serve(ctx context.Context) {
